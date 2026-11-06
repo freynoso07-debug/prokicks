@@ -1,0 +1,75 @@
+rules_version = '2';
+
+// Reglas de seguridad de Cloud Firestore para PROKICKS.
+// Se pegan en: Consola de Firebase → Firestore Database → Reglas → Publicar.
+//
+// Resumen:
+//  - El catálogo se puede LEER sin cuenta (cualquiera puede mirar la tienda).
+//  - Solo un admin crea, edita o borra productos y cupones.
+//  - Cada cliente solo ve y modifica SUS datos y SUS pedidos.
+//  - Nadie puede darse a sí mismo el rol de admin.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logueado() {
+      return request.auth != null;
+    }
+
+    function esAdmin() {
+      return logueado()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'admin';
+    }
+
+    // Campos que cambian en esta escritura.
+    function camposCambiados() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    // ---------------------------- productos ----------------------------
+    match /productos/{productoId} {
+      allow read: if true;
+      allow create, delete: if esAdmin();
+      // Un cliente logueado solo puede tocar el stock y las ventas: es lo que
+      // hace la transacción al comprar o al cancelar un pedido.
+      allow update: if esAdmin()
+                    || (logueado() && camposCambiados().hasOnly(['talles', 'ventas']));
+    }
+
+    // ---------------------------- usuarios -----------------------------
+    match /usuarios/{uid} {
+      allow read: if (logueado() && request.auth.uid == uid) || esAdmin();
+      // Al registrarse, el rol tiene que ser 'cliente'.
+      allow create: if logueado()
+                    && request.auth.uid == uid
+                    && request.resource.data.rol == 'cliente';
+      // El dueño puede editar su perfil, pero NUNCA su propio rol.
+      allow update: if esAdmin()
+                    || (logueado() && request.auth.uid == uid && !camposCambiados().hasAny(['rol']));
+      allow delete: if false;
+    }
+
+    // ---------------------------- pedidos ------------------------------
+    match /pedidos/{pedidoId} {
+      allow create: if logueado() && request.resource.data.uid == request.auth.uid;
+      allow read: if esAdmin() || (logueado() && resource.data.uid == request.auth.uid);
+      // El dueño solo puede cambiar el pago, el estado (pagar/cancelar) y
+      // la marca del mail. El admin puede cambiar todo.
+      allow update: if esAdmin()
+                    || (logueado()
+                        && resource.data.uid == request.auth.uid
+                        && camposCambiados().hasOnly(['pago', 'estado', 'emailEnviado', 'actualizadoEn']));
+      allow delete: if false;
+    }
+
+    // ---------------------------- cupones ------------------------------
+    match /cupones/{codigo} {
+      allow read: if logueado();
+      allow create, delete: if esAdmin();
+      // Al comprar, la transacción suma 1 al contador de usos.
+      allow update: if esAdmin()
+                    || (logueado() && camposCambiados().hasOnly(['usos']));
+    }
+  }
+}

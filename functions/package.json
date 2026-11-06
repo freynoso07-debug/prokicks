@@ -1,0 +1,17 @@
+{
+  "name": "prokicks-functions",
+  "description": "Cloud Functions de PROKICKS: preferencias y webhook de Mercado Pago",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "prokicks-web",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": ["run", "-d", "web-server", "--web-port", "5000", "--web-hostname", "localhost"],
+      "port": 5000
+    },
+    {
+      "name": "prokicks-release",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5050", "--bind", "localhost", "--directory", "build/web"],
+      "port": 5050
+    }
+  ]
+}
