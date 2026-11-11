@@ -197,6 +197,38 @@ Puma Future 8, King y Truco, los 3 New Balance y los 3 Mizuno (casi no hay fotos
 No la cargó Claude. Claude recomendó reemplazarla por una foto libre: es de un vendedor de réplicas y el
 servidor bloquea las peticiones por CORS. El grupo decidió dejarla.
 
+## Entre el 06/11 y el 11/11/2026 — Fotos reemplazadas por el grupo
+
+- **Grupo (Felipe):** reemplazó desde el panel admin las fotos de los productos por URLs del álbum de Yupoo
+  `wanlian123`. Al 11/11 los **19 productos** tienen una foto de `photo.yupoo.com`. Las 8 fotos de Unsplash/Pexels
+  que había cargado Claude ya no se usan, y la tabla de arriba queda solo como historial.
+- El producto **Puma Truco III IC** no está más en `productos` (hay 19 en vez de 20).
+- Claude había recomendado no usar ese álbum; el grupo decidió mantenerlo. Las imágenes se ven porque la app
+  usa `webHtmlElementStrategy` (las carga como `<img>` del navegador) cuando el servidor bloquea la descarga por CORS.
+- **Cloudinary:** quedó configurado y listo para usarse (Cloud name `olvmfcyl`, preset Unsigned `prokicks_unsigned`),
+  pero las fotos se cargaron por URL y no se subió ninguna a Cloudinary. No hay captura de la Media Library.
+
+## 11/11/2026 — Capturas de Firebase para la entrega (Grupo, con guía de Claude Code)
+
+Felipe sacó las capturas de la consola de Firebase. Claude armó los links directos, revisó cada captura
+y la guardó en `capturas/`. Claude no pudo sacarlas él: el navegador del panel pedía iniciar sesión en Google y la
+extensión de Chrome no estaba conectada.
+
+| Archivo | Qué muestra |
+|---|---|
+| `1_auth_usuarios.png` | Authentication → Usuarios: `reynosofelipe542@gmail.com`, proveedor correo, alta 5 nov 2026 |
+| `2a_producto_talles_ventas.png` | `productos/YlTGRU5YewTUCzFlyhqS` (Mercurial Vapor 16 Elite FG): mapa `talles` 38–45 y `ventas: 142` |
+| `2b_producto_imagenes_precio.png` | El mismo producto: `imagenes`, `marca`, `nombre`, `precio: 489999`, `sku`, `superficie` |
+| `3_usuario.png` | `usuarios/HxBfOvFHt…`: `rol: "admin"`, `direccion` (completada con Georef en el checkout), `favoritos`, `email`, `telefono` |
+| `4a_pedido_datos.png` | `pedidos/r7hwHkdejA6yNOhkvlja`: `cantidadProductos: 2`, `cotizacionDolar: 1570` (DolarAPI), `creadoEn`, `direccion` |
+| `4b_pedido_envio_estado.png` | El mismo pedido: `emailEnviado: true` (EmailJS), `envio` (domicilio, gratis desde $200.000), `estado: "pagado"` |
+| `4c_pedido_items.png` | `items[0]`: Adidas F50 League MG, cantidad, colores, precio leído dentro de la transacción, `productoId` |
+| `4d_pedido_pago_total.png` | `pago` (aprobado, mercadopago, modo prueba, referencia), `subtotal`, `total: 279998`, `totalUsd: 178.34` (= 279998 / 1570), `uid` del dueño |
+| `5_cupon.png` | `cupones/FINDE20`: `usos: 1` de `usosMax: 50` (lo sumó la transacción del pedido), `minimo: 300000`, `tipo: "porcentaje"`, `valor: 20`, `activo: true`. El ID del documento es el código del cupón |
+| `6_reglas.png` | Firestore → Reglas: versión publicada el 5 nov 2026 10:10 (la anterior, 10:09); funciones `logueado()`, `esAdmin()` (lee `usuarios/{uid}.rol`) y `camposCambiados()` |
+
+No hay captura de la Media Library de Cloudinary porque las fotos se cargaron por URL.
+
 ---
 
 ## Pendiente (completar el grupo)
