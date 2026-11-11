@@ -257,6 +257,17 @@ No hay captura de la Media Library de Cloudinary porque las fotos se cargaron po
 
 ---
 
+## 11/11/2026 — Zip de entrega (Claude Code)
+
+- Al revisar el zip se vio que faltaba `test/widget_test.dart`: se había borrado del disco antes del primer commit
+  (06/11), así que no estaba en git. Claude lo restauró con el mismo contenido del 05/11.
+  `flutter test` → `+7: All tests passed!`.
+- El zip se genera con `git archive --format=zip --prefix=prokicks/ HEAD`: incluye solo lo que está commiteado,
+  así que deja afuera `build/`, `.dart_tool/`, `.git/` y `functions/node_modules/` sin depender de borrarlos a mano.
+- Se probó descomprimiéndolo en otra carpeta y corriendo `flutter pub get`, `flutter analyze` y `flutter test` ahí.
+
+---
+
 ## Pendiente (completar el grupo)
 - [x] Cuenta de EmailJS: Service ID, Template ID y Public Key. Docs: https://www.emailjs.com/docs/rest-api/send/
 - [ ] Cuenta de Cloudinary: Cloud name y preset Unsigned. Docs: https://cloudinary.com/documentation/upload_images#unsigned_upload
