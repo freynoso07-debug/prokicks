@@ -314,6 +314,21 @@ No hay captura de la Media Library de Cloudinary porque las fotos se cargaron po
 
 ---
 
+## 11/11/2026 — Repositorio en GitHub
+
+- **Repositorio:** <https://github.com/freynoso07-debug/prokicks> (público).
+- **Grupo (Felipe):** creó el repo vacío en su cuenta `freynoso07-debug` e inició sesión en GitHub desde el navegador
+  cuando Git Credential Manager lo pidió.
+- **Cuentas:** en esta PC la credencial de GitHub guardada es de `SantinoZanussi`. Para no usarla, el remoto se configuró
+  con el usuario en la URL: `https://freynoso07-debug@github.com/freynoso07-debug/prokicks.git`. El primer `git push` desde
+  la terminal de Claude falló con `fatal: could not read Password for 'https://freynoso07-debug@github.com': terminal
+  prompts disabled`, porque esa terminal no es interactiva y por eso no pudo pedir el inicio de sesión. Se volvió a correr
+  en la terminal de la app, donde Felipe inició sesión.
+- **Verificado** con la API de GitHub: 6 commits y 91 archivos, iguales al repo local. No se subieron `build/`,
+  `.dart_tool/` ni `.firebase/`.
+
+---
+
 ## Pendiente (completar el grupo)
 - [x] Cuenta de EmailJS: Service ID, Template ID y Public Key. Docs: https://www.emailjs.com/docs/rest-api/send/
 - [ ] Cuenta de Cloudinary: Cloud name y preset Unsigned. Docs: https://cloudinary.com/documentation/upload_images#unsigned_upload
