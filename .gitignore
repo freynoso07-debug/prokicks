@@ -49,3 +49,6 @@ app.*.map.json
 
 # Dependencias de las Cloud Functions (se instalan con npm install)
 functions/node_modules/
+
+# Caché local de firebase deploy
+.firebase/

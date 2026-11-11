@@ -268,6 +268,27 @@ No hay captura de la Media Library de Cloudinary porque las fotos se cargaron po
 
 ---
 
+## 11/11/2026 — App publicada en Firebase Hosting
+
+- **URL pública:** <https://prokicks-df2b8.web.app> (plan Spark, gratis).
+- **Cuentas:** la Firebase CLI de esta PC tenía guardada la sesión de `santino.zanu@gmail.com`, que no tiene acceso al
+  proyecto. Claude lo vio con `firebase login:list` y `firebase projects:list`, dos consultas de solo lectura que no
+  cambiaron nada. **Felipe** agregó su cuenta con `firebase login:add`. La cuenta por defecto de la CLI sigue siendo la de
+  Santino, así que el deploy se hizo indicando la cuenta: `--account reynosofelipe542@gmail.com`.
+- **Claude Code:** creó `firebase.json` (publica `build/web`, reescribe toda ruta a `/index.html` porque es una SPA,
+  `index.html` sin caché y el resto con 1 hora), compiló con `flutter build web --release` (40 archivos, 41 MB) y publicó
+  con `firebase deploy --only hosting --project prokicks-df2b8 --account reynosofelipe542@gmail.com`
+  (`Deploy complete!`). Las reglas de Firestore no se tocaron.
+- **Verificado:** la página, `main.dart.js`, la foto del banner y una ruta inventada responden 200. La home carga con la
+  animación y las fotos de productos se ven desde el dominio público. Firebase Auth acepta `*.web.app` como dominio
+  autorizado por defecto.
+- **Para volver a publicar después de un cambio:** `flutter build web --release` y después
+  `firebase deploy --only hosting --account reynosofelipe542@gmail.com`.
+- Con la app en https, el `auto_return` de Mercado Pago real (que exige una URL https) ya sería posible si se activan las
+  Cloud Functions.
+
+---
+
 ## Pendiente (completar el grupo)
 - [x] Cuenta de EmailJS: Service ID, Template ID y Public Key. Docs: https://www.emailjs.com/docs/rest-api/send/
 - [ ] Cuenta de Cloudinary: Cloud name y preset Unsigned. Docs: https://cloudinary.com/documentation/upload_images#unsigned_upload
