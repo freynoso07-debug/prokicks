@@ -289,6 +289,31 @@ No hay captura de la Media Library de Cloudinary porque las fotos se cargaron po
 
 ---
 
+## 11/11/2026 — Fotos de productos movidas a Cloudinary
+
+- **Problema:** en la app publicada los productos mostraban el dibujo en vez de la foto. Causa: Yupoo tiene protección
+  contra *hotlinking*. Con `curl` se comprobó que la misma foto devuelve **567** (página de bloqueo) si la pide
+  `prokicks-df2b8.web.app` o nadie, y **200** solo si la pide `localhost` o el propio Yupoo. Por eso en `flutter run` se
+  veían y en el hosting no.
+- **Claude no descargó las fotos de Yupoo** para saltear ese bloqueo. **El grupo (Felipe)** bajó las 19 fotos y se
+  las pasó a Claude como archivos.
+- **Claude Code:** asignó cada foto a su botín según el modelo que se ve, y las subió a la cuenta de Cloudinary del grupo
+  (`olvmfcyl`) con el preset Unsigned `prokicks_unsigned`, haciendo la misma llamada que usa la app (POST multipart a
+  `/image/upload`, con `public_id` = nombre del botín). Se comprobó que Cloudinary las entrega con
+  `Access-Control-Allow-Origin: *`. Después, desde el panel admin con la sesión de Felipe, se reemplazó en cada producto
+  la foto vieja por la nueva (sacar la foto con ✕, Agregar por URL, Guardar cambios). Las URLs están en
+  `fotos_cloudinary.md`.
+- **Verificado:** leído de Firestore, los **19 de 19** productos tienen una sola foto, la suya, en Cloudinary. En
+  <https://prokicks-df2b8.web.app> el catálogo muestra las 19 fotos. No hizo falta volver a publicar la app, porque el
+  cambio está en Firestore.
+- **Un tropiezón en el camino:** una vez el aviso \"Cambios guardados\" tapó el lápiz y los clics siguientes cayeron sobre
+  la lista. No se modificó nada (la verificación en Firestore lo confirma). Después se esperó a que se fuera el aviso
+  antes de cada clic.
+- **Cloudinary ahora tiene fotos:** ya se puede sacar la captura de la Media Library.
+- Las fotos son de producto de las marcas: el grupo las aportó y los derechos son de cada marca.
+
+---
+
 ## Pendiente (completar el grupo)
 - [x] Cuenta de EmailJS: Service ID, Template ID y Public Key. Docs: https://www.emailjs.com/docs/rest-api/send/
 - [ ] Cuenta de Cloudinary: Cloud name y preset Unsigned. Docs: https://cloudinary.com/documentation/upload_images#unsigned_upload
