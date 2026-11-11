@@ -231,6 +231,32 @@ No hay captura de la Media Library de Cloudinary porque las fotos se cargaron po
 
 ---
 
+## 11/11/2026 — Banner principal con foto y animación de vuelo (Claude Code, a pedido del grupo)
+
+- **Pedido del grupo:** reemplazar el botín dibujado del banner por una foto real y que parezca que vuela.
+  Felipe pasó la foto (un Nike Phantom GX). Es una foto de producto de la marca: si aparece en el informe,
+  aclarar que es ilustrativa y que los derechos son de Nike.
+- **Fondo transparente:** la foto venía con fondo gris liso (RGB 230,230,230), que sobre el banner negro se veía
+  como un recuadro. Como no estaba instalado Pillow (Python), se usó un script de PowerShell con C# (`System.Drawing`):
+  relleno por inundación desde los bordes, que borra solo el gris conectado al borde y no los grises del botín,
+  más alfa parcial en el contorno para que no quede serruchado. Quedó el 74% transparente.
+- **Asset:** `assets/images/botin_banner.png`, registrado en `pubspec.yaml` en `flutter: assets:`.
+  Va dentro de la app, así que no depende de internet.
+- **Animación** (`_BotinFlotante` en `home_screen.dart`), con dos `AnimationController`:
+  - *vuelo* (2,4 s, ida y vuelta): el botín sube hasta el 7% del alto, avanza unos píxeles y se inclina.
+  - *líneas* (1,1 s, en loop): tres líneas verdes salen hacia atrás y se desvanecen, desfasadas entre sí.
+  - Una sombra elíptica verde en el piso que se achica y se aclara cuando el botín sube.
+  - Si el sistema tiene activado "reducir movimiento" (`MediaQuery.disableAnimations`), el botín queda quieto.
+  - Si el asset no carga, se muestra el dibujo de antes (`errorBuilder` → `BotinImagen`).
+- **Error encontrado y resuelto:** la sombra se veía como un puntito, porque un `RadialGradient` en un rectángulo
+  bajo usa el lado corto como radio. Se cambió por un círculo con degradé aplastado con
+  `Transform.scale(scaleY: 0.12, alignment: Alignment.bottomCenter)`. El `alignment` hace falta: sin él se aplasta
+  desde el centro y la elipse queda a mitad de altura.
+- Verificado: `flutter analyze` sin problemas, `flutter build web` OK, se ve en escritorio y en celular, y el
+  movimiento se comprobó comparando dos capturas tomadas con 1,2 s de diferencia.
+
+---
+
 ## Pendiente (completar el grupo)
 - [x] Cuenta de EmailJS: Service ID, Template ID y Public Key. Docs: https://www.emailjs.com/docs/rest-api/send/
 - [ ] Cuenta de Cloudinary: Cloud name y preset Unsigned. Docs: https://cloudinary.com/documentation/upload_images#unsigned_upload
